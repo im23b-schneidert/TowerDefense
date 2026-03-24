@@ -41,6 +41,7 @@ export class Tower {
     const rangeSquared = this.currentStats.range * this.currentStats.range;
 
     for (const enemy of enemies) {
+      if (enemy.isDead || enemy.hasReachedGoal) continue;
       const dx = enemy.x - this.x;
       const dy = enemy.y - this.y;
       if (dx * dx + dy * dy <= rangeSquared) {
@@ -58,7 +59,10 @@ export class Tower {
 
     const target = this.findTarget(enemies);
     if (target) {
-      console.log(`[${this.type}] target acquired:`, target);
+      target.takeDamage(this.currentStats.damage);
+      console.log(
+        `[${this.type}] hit enemy ${target.type} for ${this.currentStats.damage} damage`,
+      );
       this.timeUntilNextShotMs = this.cooldownMs;
     }
   }

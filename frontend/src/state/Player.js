@@ -1,0 +1,4 @@
+export const Player = {
+  hp: 100,
+  gold: 200,
+};

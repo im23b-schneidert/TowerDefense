@@ -52,6 +52,64 @@ export class MapManager {
     };
   }
 
+  gridToWorldCenter(row, col) {
+    return {
+      x: col * this.tileSize + this.tileSize / 2,
+      y: row * this.tileSize + this.tileSize / 2,
+    };
+  }
+
+  getPathWaypoints() {
+    const pathTiles = [];
+    for (let row = 0; row < this.rows; row += 1) {
+      for (let col = 0; col < this.cols; col += 1) {
+        if (this.layout[row][col] === TILE_TYPES.PATH) {
+          pathTiles.push({ row, col });
+        }
+      }
+    }
+
+    if (pathTiles.length === 0) return [];
+
+    const pathSet = new Set(pathTiles.map((tile) => `${tile.row},${tile.col}`));
+    const getNeighbors = (row, col) => {
+      const candidates = [
+        { row: row - 1, col },
+        { row: row + 1, col },
+        { row, col: col - 1 },
+        { row, col: col + 1 },
+      ];
+
+      return candidates.filter((tile) => pathSet.has(`${tile.row},${tile.col}`));
+    };
+
+    const endpoints = pathTiles.filter(
+      (tile) => getNeighbors(tile.row, tile.col).length === 1,
+    );
+
+    const startTile = endpoints[0] ?? pathTiles[0];
+    const orderedTiles = [startTile];
+    const visited = new Set([`${startTile.row},${startTile.col}`]);
+
+    while (orderedTiles.length < pathTiles.length) {
+      const current = orderedTiles[orderedTiles.length - 1];
+      const next = getNeighbors(current.row, current.col).find(
+        (tile) => !visited.has(`${tile.row},${tile.col}`),
+      );
+
+      if (!next) break;
+
+      orderedTiles.push(next);
+      visited.add(`${next.row},${next.col}`);
+    }
+
+    return orderedTiles.map((tile) => ({
+      row: tile.row,
+      col: tile.col,
+      ...this.gridToWorldCenter(tile.row, tile.col),
+    }));
+  }
+
   draw(ctx) {
     for (let row = 0; row < this.rows; row += 1) {
       for (let col = 0; col < this.cols; col += 1) {
