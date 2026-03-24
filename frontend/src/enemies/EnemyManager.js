@@ -2,12 +2,41 @@ import { Enemy } from "./Enemy.js";
 
 export const BASIC_ENEMY_TEMPLATE = Object.freeze({
   type: "Basic Enemy",
-  hp: 45,
+  hp: 70,
   speed: 75,
   damage: 10,
   gold: 20,
   color: "#fb7185",
   radius: 12,
+  shape: "circle",
+});
+
+export const FAST_ENEMY_TEMPLATE = Object.freeze({
+  type: "Fast Enemy",
+  hp: 50,
+  speed: BASIC_ENEMY_TEMPLATE.speed * 2,
+  damage: 6,
+  gold: 10,
+  color: "#22c55e",
+  radius: 10,
+  shape: "diamond",
+});
+
+export const TANK_ENEMY_TEMPLATE = Object.freeze({
+  type: "Tank Enemy",
+  hp: 300,
+  speed: BASIC_ENEMY_TEMPLATE.speed * 0.5,
+  damage: 20,
+  gold: 45,
+  color: "#7f1d1d",
+  radius: 15,
+  shape: "square",
+});
+
+export const ENEMY_TEMPLATES = Object.freeze({
+  basic: BASIC_ENEMY_TEMPLATE,
+  fast: FAST_ENEMY_TEMPLATE,
+  tank: TANK_ENEMY_TEMPLATE,
 });
 
 export class EnemyManager {

@@ -17,6 +17,7 @@ export class Enemy {
 
     this.radius = config.radius ?? 14;
     this.color = config.color ?? "#ef4444";
+    this.shape = config.shape ?? "circle";
     this.isDead = false;
     this.hasReachedGoal = false;
 
@@ -68,9 +69,22 @@ export class Enemy {
   draw(ctx) {
     ctx.save();
     ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fill();
+    if (this.shape === "diamond") {
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y - this.radius);
+      ctx.lineTo(this.x + this.radius, this.y);
+      ctx.lineTo(this.x, this.y + this.radius);
+      ctx.lineTo(this.x - this.radius, this.y);
+      ctx.closePath();
+      ctx.fill();
+    } else if (this.shape === "square") {
+      const size = this.radius * 2;
+      ctx.fillRect(this.x - this.radius, this.y - this.radius, size, size);
+    } else {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     const hpRatio = this.currentHp / this.currentStats.hp;
     const barWidth = this.radius * 2;

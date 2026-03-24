@@ -10,6 +10,43 @@ export const BASIC_TOWER_TEMPLATE = Object.freeze({
   size: 18,
 });
 
+export const MACHINE_GUN_TOWER_TEMPLATE = Object.freeze({
+  type: "Machine Gun Tower",
+  damage: 6,
+  attackSpeed: 5.5,
+  range: 105,
+  cost: 40,
+  color: "#ef4444",
+  size: 16,
+});
+
+export const SNIPER_TOWER_TEMPLATE = Object.freeze({
+  type: "Sniper Tower",
+  damage: 95,
+  attackSpeed: 0.45,
+  range: 260,
+  cost: 120,
+  color: "#4338ca",
+  size: 17,
+});
+
+export const CANNON_TOWER_TEMPLATE = Object.freeze({
+  type: "Cannon Tower",
+  damage: 48,
+  attackSpeed: 1.3,
+  range: 155,
+  cost: 75,
+  color: "#f97316",
+  size: 20,
+});
+
+export const TOWER_TEMPLATES = Object.freeze({
+  basic: BASIC_TOWER_TEMPLATE,
+  machineGun: MACHINE_GUN_TOWER_TEMPLATE,
+  sniper: SNIPER_TOWER_TEMPLATE,
+  cannon: CANNON_TOWER_TEMPLATE,
+});
+
 export class TowerManager {
   constructor(mapManager) {
     this.mapManager = mapManager;
