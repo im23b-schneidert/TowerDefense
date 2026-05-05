@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  // GitHub Pages serves this project under /<repo-name>/
-  base: "/TowerDefense/",
+  // Use relative asset URLs so GitHub Pages works regardless of repo path/casing.
+  base: "./",
 });
