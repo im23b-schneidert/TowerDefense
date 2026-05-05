@@ -45,6 +45,10 @@ export class MapManager {
     return tileData?.blocksProjectiles ?? true;
   }
 
+  isMountainTile(row, col) {
+    return this.getTileType(row, col) === TILE_TYPES.MOUNTAIN;
+  }
+
   worldToGrid(x, y) {
     return {
       row: Math.floor(y / this.tileSize),
@@ -129,7 +133,7 @@ export class MapManager {
           ctx.fillRect(x + 12, y + 18, this.tileSize - 24, 4);
         }
 
-        if (tileType === TILE_TYPES.HILL) {
+        if (tileType === TILE_TYPES.MOUNTAIN) {
           ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
           ctx.beginPath();
           ctx.moveTo(x + 8, y + this.tileSize - 8);

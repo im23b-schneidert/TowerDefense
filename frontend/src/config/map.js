@@ -2,6 +2,8 @@ export const TILE_TYPES = Object.freeze({
   GRASS: 0,
   PATH: 1,
   WATER: 2,
+  MOUNTAIN: 3,
+  // Legacy alias so older references do not break.
   HILL: 3,
 });
 
@@ -27,10 +29,10 @@ export const TILE_CONFIG = Object.freeze({
     enemyWalkable: false,
     blocksProjectiles: false,
   },
-  [TILE_TYPES.HILL]: {
-    name: "Hill",
+  [TILE_TYPES.MOUNTAIN]: {
+    name: "Mountain",
     color: "#656565",
-    placeable: false,
+    placeable: true,
     enemyWalkable: false,
     blocksProjectiles: true,
   },

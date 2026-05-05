@@ -1,4 +1,5 @@
 import { Tower } from "./Tower.js";
+import { TILE_TYPES } from "../config/map.js";
 
 export const BASIC_TOWER_TEMPLATE = Object.freeze({
   type: "Basic Tower",
@@ -68,12 +69,20 @@ export class TowerManager {
     const x = col * tileSize + tileSize / 2;
     const y = row * tileSize + tileSize / 2;
 
+    const towerElevation =
+      this.mapManager.getTileType(row, col) === TILE_TYPES.MOUNTAIN
+        ? "mountain"
+        : "ground";
+    const rangeMultiplier = towerElevation === "mountain" ? 1.5 : 1;
+
     const tower = new Tower({
       ...towerTemplate,
       row,
       col,
       x,
       y,
+      elevation: towerElevation,
+      range: towerTemplate.range * rangeMultiplier,
     });
 
     this.towers.push(tower);
@@ -86,7 +95,7 @@ export class TowerManager {
 
   update(deltaMs, enemies) {
     for (const tower of this.towers) {
-      tower.update(deltaMs, enemies);
+      tower.update(deltaMs, enemies, this.mapManager);
     }
   }
 

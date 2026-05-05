@@ -1,3 +1,5 @@
+import { hasLineOfSight } from "../combat/lineOfSight.js";
+
 export class Tower {
   constructor(config) {
     this.id = config.id ?? crypto.randomUUID();
@@ -21,6 +23,7 @@ export class Tower {
     this.timeUntilNextShotMs = 0;
     this.size = config.size ?? 18;
     this.color = config.color ?? "#d1d5db";
+    this.elevation = config.elevation ?? "ground";
   }
 
   setStat(statName, value) {
@@ -37,14 +40,21 @@ export class Tower {
     return dx * dx + dy * dy <= this.size * this.size;
   }
 
-  findTarget(enemies) {
-    const rangeSquared = this.currentStats.range * this.currentStats.range;
+  getEffectiveRange() {
+    return this.currentStats.range;
+  }
+
+  findTarget(enemies, mapManager) {
+    const rangeSquared = this.getEffectiveRange() * this.getEffectiveRange();
 
     for (const enemy of enemies) {
       if (enemy.isDead || enemy.hasReachedGoal) continue;
       const dx = enemy.x - this.x;
       const dy = enemy.y - this.y;
-      if (dx * dx + dy * dy <= rangeSquared) {
+      if (
+        dx * dx + dy * dy <= rangeSquared &&
+        hasLineOfSight(this, enemy, mapManager)
+      ) {
         return enemy;
       }
     }
@@ -52,12 +62,12 @@ export class Tower {
     return null;
   }
 
-  update(deltaMs, enemies) {
+  update(deltaMs, enemies, mapManager) {
     this.timeUntilNextShotMs -= deltaMs;
 
     if (this.timeUntilNextShotMs > 0) return;
 
-    const target = this.findTarget(enemies);
+    const target = this.findTarget(enemies, mapManager);
     if (target) {
       target.takeDamage(this.currentStats.damage);
       console.log(
@@ -68,15 +78,6 @@ export class Tower {
   }
 
   draw(ctx, isHovered = false) {
-    if (isHovered) {
-      ctx.save();
-      ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.currentStats.range, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
-
     ctx.save();
     ctx.fillStyle = this.color;
     ctx.beginPath();
