@@ -57,7 +57,7 @@ pipeline {
         stage("SonarQube Analysis") {
             when {
                 allOf {
-                    branch "develop"
+                    branch "main"
                     expression { params.ENABLE_SONAR }
                 }
             }
@@ -81,7 +81,6 @@ pipeline {
                     anyOf {
                         branch "main"
                         branch "master"
-                        branch "develop"
                     }
                     expression { fileExists("frontend/dist") }
                 }
@@ -152,7 +151,6 @@ pipeline {
                     anyOf {
                         branch "main"
                         branch "master"
-                        branch "develop"
                     }
                     expression { params.DB_CREDENTIALS_ID?.trim() }
                     expression { fileExists("backend/Dockerfile") }
