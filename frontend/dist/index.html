@@ -4,15 +4,107 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tower Defense Starter</title>
-    <script type="module" crossorigin src="./assets/index-dVJyT_ww.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-9mm9I1V-.css">
+    <script type="module" crossorigin src="./assets/index-CmERumZm.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B947u5nP.css">
   </head>
   <body>
+    <div class="start-screen" id="startScreen">
+      <div class="start-screen-panel">
+        <div class="start-emblem" aria-hidden="true">TD</div>
+        <p class="start-eyebrow">Kingdom Wardens</p>
+        <h2 class="start-title">Tower Defense</h2>
+        <p class="start-subtitle">Fortify the realm. Protect the crown.</p>
+        <p class="start-copy">
+          Raise battlements, spend your coin wisely, and stop every wave before
+          the kingdom walls fall.
+        </p>
+        <div class="difficulty-picker" role="group" aria-label="Select difficulty">
+          <button
+            class="difficulty-option selected"
+            type="button"
+            data-difficulty="easy"
+            aria-pressed="true"
+          >
+            Easy
+          </button>
+          <button
+            class="difficulty-option"
+            type="button"
+            data-difficulty="medium"
+            aria-pressed="false"
+          >
+            Medium
+          </button>
+          <button
+            class="difficulty-option"
+            type="button"
+            data-difficulty="hard"
+            aria-pressed="false"
+          >
+            Hard
+          </button>
+        </div>
+        <div class="start-actions">
+          <button id="playButton" class="start-button" type="button">Play</button>
+          <button
+            id="howToPlayButton"
+            class="start-button secondary"
+            type="button"
+            aria-expanded="false"
+          >
+            How To Play
+          </button>
+        </div>
+        <div class="start-help" id="startHelp" hidden>
+          <p>
+            Place towers on grass, protect the path, and use <strong>Esc</strong>
+            or right-click to clear tower selection.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <main class="app">
-      <h1>Tower Defense - Map Prototype</h1>
       <section class="game-shell">
-        <div class="shop" id="shop">
-          <p class="shop-title">Build Menu</p>
+        <aside class="sidebar">
+          <div class="sidebar-card">
+            <p class="sidebar-kicker">In Game</p>
+            <h1 class="sidebar-title">War Room</h1>
+            <div class="stats-grid">
+              <p class="stat-item"><span>HP</span><strong id="hpValue">100</strong></p>
+              <p class="stat-item"><span>Gold</span><strong id="goldValue">200</strong></p>
+              <p class="stat-item"><span>Wave</span><strong id="waveValue">1</strong></p>
+              <p class="stat-item"><span>Build Cost</span><strong id="buildCostValue">-</strong></p>
+              <p class="stat-item">
+                <span>Difficulty</span>
+                <strong id="difficultyValue">Easy</strong>
+              </p>
+            </div>
+            <p class="status-line" id="waveStatusValue">Press Play to begin.</p>
+            <button id="waveStartButton" class="wave-button" type="button">
+              Start Wave 1
+            </button>
+            <label class="auto-start-toggle" for="autoStartRoundsToggle">
+              <input id="autoStartRoundsToggle" type="checkbox" />
+              Auto Start Rounds
+            </label>
+            <p class="status-line muted" id="selectionValue">Selected: None</p>
+            <div class="upgrade-panel">
+              <p class="upgrade-title">Tower Upgrades</p>
+              <p class="upgrade-subtitle" id="upgradeTowerLabel">
+                Click a placed tower to upgrade it.
+              </p>
+              <button id="upgradePathAButton" class="upgrade-button" type="button" disabled>
+                Path A
+              </button>
+              <button id="upgradePathBButton" class="upgrade-button" type="button" disabled>
+                Path B
+              </button>
+            </div>
+          </div>
+
+          <div class="shop" id="shop">
+            <p class="shop-title">Barracks</p>
           <button
             id="basicTowerButton"
             class="shop-button"
@@ -49,18 +141,30 @@
           >
             Cannon Tower (75g)
           </button>
-        </div>
+          </div>
+        </aside>
 
         <div class="canvas-wrap">
           <canvas id="gameCanvas" aria-label="Tower Defense grid"></canvas>
-          <button id="restartButton" class="restart-button" type="button" hidden>
-            Restart
-          </button>
+          <div id="gameOverPanel" class="game-over-panel" hidden>
+            <h3 class="game-over-title">Defeat</h3>
+            <p class="game-over-copy">
+              You reached wave <strong id="gameOverWaveValue">0</strong>.
+            </p>
+            <p class="game-over-copy">
+              Best for
+              <strong id="gameOverDifficultyValue">Easy</strong>:
+              <strong id="gameOverHighScoreValue">0</strong>
+            </p>
+            <div class="game-over-actions">
+              <button id="replayButton" class="game-over-button" type="button">Replay</button>
+              <button id="backToMenuButton" class="game-over-button secondary" type="button">
+                Back to Main Menu
+              </button>
+            </div>
+          </div>
         </div>
       </section>
-      <p class="legend">
-        0 = Grass (placeable), 1 = Path, 2 = Water, 3 = Hill (LOS blocker)
-      </p>
     </main>
 
   </body>

@@ -1,4 +1,5 @@
 import { TILE_CONFIG, TILE_TYPES } from "./config/map.js";
+import { FANTASY_THEME } from "./theme/fantasyTheme.js";
 
 export class MapManager {
   constructor(layout, tileSize = 64) {
@@ -10,6 +11,12 @@ export class MapManager {
     if (this.rows === 0 || this.cols === 0) {
       throw new Error("Map layout must contain at least one row and one column.");
     }
+
+    this.sprites = null;
+  }
+
+  setSpriteStore(spriteStore) {
+    this.sprites = spriteStore ?? null;
   }
 
   getWidthPx() {
@@ -119,21 +126,34 @@ export class MapManager {
       for (let col = 0; col < this.cols; col += 1) {
         const tileType = this.layout[row][col];
         const tileData = TILE_CONFIG[tileType] ?? TILE_CONFIG[TILE_TYPES.GRASS];
+        const spriteKey =
+          tileData.spriteKey ??
+          (tileType === TILE_TYPES.PATH
+            ? "path"
+            : tileType === TILE_TYPES.WATER
+              ? "water"
+              : tileType === TILE_TYPES.MOUNTAIN
+                ? "mountain"
+                : "grass");
+        const tileSprite = this.sprites?.tiles?.[spriteKey] ?? null;
 
         const x = col * this.tileSize;
         const y = row * this.tileSize;
 
-        ctx.fillStyle = tileData.color;
-        ctx.fillRect(x, y, this.tileSize, this.tileSize);
+        if (tileSprite) {
+          ctx.drawImage(tileSprite, x, y, this.tileSize, this.tileSize);
+        } else {
+          ctx.fillStyle = tileData.color;
+          ctx.fillRect(x, y, this.tileSize, this.tileSize);
+        }
 
-        // Subtle inner pattern so tile differences read clearly.
-        if (tileType === TILE_TYPES.WATER) {
+        if (!tileSprite && tileType === TILE_TYPES.WATER) {
           ctx.fillStyle = "rgba(255, 255, 255, 0.14)";
           ctx.fillRect(x + 8, y + 8, this.tileSize - 16, 4);
           ctx.fillRect(x + 12, y + 18, this.tileSize - 24, 4);
         }
 
-        if (tileType === TILE_TYPES.MOUNTAIN) {
+        if (!tileSprite && tileType === TILE_TYPES.MOUNTAIN) {
           ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
           ctx.beginPath();
           ctx.moveTo(x + 8, y + this.tileSize - 8);
@@ -149,7 +169,7 @@ export class MapManager {
   }
 
   drawGridLines(ctx) {
-    ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
+    ctx.strokeStyle = "rgba(27, 18, 12, 0.34)";
     ctx.lineWidth = 1;
 
     for (let row = 0; row <= this.rows; row += 1) {
@@ -167,5 +187,9 @@ export class MapManager {
       ctx.lineTo(x, this.getHeightPx());
       ctx.stroke();
     }
+
+    ctx.strokeStyle = FANTASY_THEME.overlays.rangeStroke;
+    ctx.lineWidth = 1.4;
+    ctx.strokeRect(0.7, 0.7, this.getWidthPx() - 1.4, this.getHeightPx() - 1.4);
   }
 }

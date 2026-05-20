@@ -6,9 +6,10 @@ export const BASIC_ENEMY_TEMPLATE = Object.freeze({
   speed: 75,
   damage: 10,
   gold: 20,
-  color: "#fb7185",
+  color: "#bb7a66",
   radius: 12,
   shape: "circle",
+  spriteKey: "basic",
 });
 
 export const FAST_ENEMY_TEMPLATE = Object.freeze({
@@ -17,9 +18,10 @@ export const FAST_ENEMY_TEMPLATE = Object.freeze({
   speed: BASIC_ENEMY_TEMPLATE.speed * 2,
   damage: 6,
   gold: 10,
-  color: "#22c55e",
+  color: "#8fb67f",
   radius: 10,
   shape: "diamond",
+  spriteKey: "fast",
 });
 
 export const TANK_ENEMY_TEMPLATE = Object.freeze({
@@ -28,9 +30,10 @@ export const TANK_ENEMY_TEMPLATE = Object.freeze({
   speed: BASIC_ENEMY_TEMPLATE.speed * 0.5,
   damage: 20,
   gold: 45,
-  color: "#7f1d1d",
+  color: "#7a4a41",
   radius: 15,
   shape: "square",
+  spriteKey: "tank",
 });
 
 export const ENEMY_TEMPLATES = Object.freeze({
@@ -40,10 +43,15 @@ export const ENEMY_TEMPLATES = Object.freeze({
 });
 
 export class EnemyManager {
-  constructor(pathWaypoints, player) {
+  constructor(pathWaypoints, player, spriteStore = null) {
     this.pathWaypoints = pathWaypoints;
     this.player = player;
     this.enemies = [];
+    this.spriteStore = spriteStore;
+  }
+
+  setSpriteStore(spriteStore) {
+    this.spriteStore = spriteStore;
   }
 
   spawnEnemy(enemyTemplate) {
@@ -52,6 +60,7 @@ export class EnemyManager {
     const enemy = new Enemy({
       ...enemyTemplate,
       pathWaypoints: this.pathWaypoints,
+      spriteStore: this.spriteStore,
     });
 
     this.enemies.push(enemy);

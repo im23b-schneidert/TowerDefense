@@ -1,0 +1,33 @@
+export const FANTASY_THEME = Object.freeze({
+  palette: Object.freeze({
+    forestDeep: "#1b2a1f",
+    forestMid: "#2f4b34",
+    moss: "#5d7a4e",
+    parchment: "#efe2c4",
+    brass: "#c8a85f",
+    brassDark: "#8f6f2f",
+    ember: "#f08a42",
+    ruby: "#d6543f",
+    cyan: "#74c4ba",
+    shadow: "#0f1713",
+    ink: "#1d140f",
+    hpGood: "#7fc072",
+  }),
+  overlays: Object.freeze({
+    gameOverScrim: "rgba(9, 13, 11, 0.70)",
+    rangeFill: "rgba(167, 127, 64, 0.14)",
+    rangeStroke: "rgba(235, 208, 132, 0.68)",
+    blockedStroke: "rgba(173, 68, 54, 0.9)",
+    ghostTowerValid: "rgba(239, 226, 196, 0.44)",
+    ghostTowerInvalid: "rgba(214, 84, 63, 0.52)",
+    ghostRangeValid: "rgba(239, 226, 196, 0.12)",
+    ghostRangeInvalid: "rgba(214, 84, 63, 0.15)",
+    hoverTowerRangeFill: "rgba(239, 226, 196, 0.10)",
+    hoverTowerRangeStroke: "rgba(235, 208, 132, 0.52)",
+    towerHover: "rgba(235, 208, 132, 0.95)",
+    hpBarBack: "rgba(20, 12, 8, 0.58)",
+  }),
+  typography: Object.freeze({
+    combatText: "bold 13px 'Trebuchet MS', Georgia, serif",
+  }),
+});

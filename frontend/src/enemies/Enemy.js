@@ -1,3 +1,5 @@
+import { FANTASY_THEME } from "../theme/fantasyTheme.js";
+
 export class Enemy {
   constructor(config) {
     this.id = config.id ?? crypto.randomUUID();
@@ -18,6 +20,8 @@ export class Enemy {
     this.radius = config.radius ?? 14;
     this.color = config.color ?? "#ef4444";
     this.shape = config.shape ?? "circle";
+    this.spriteKey = config.spriteKey ?? null;
+    this.spriteStore = config.spriteStore ?? null;
     this.isDead = false;
     this.hasReachedGoal = false;
 
@@ -67,23 +71,29 @@ export class Enemy {
   }
 
   draw(ctx) {
+    const enemySprite = this.spriteStore?.enemies?.[this.spriteKey] ?? null;
     ctx.save();
-    ctx.fillStyle = this.color;
-    if (this.shape === "diamond") {
-      ctx.beginPath();
-      ctx.moveTo(this.x, this.y - this.radius);
-      ctx.lineTo(this.x + this.radius, this.y);
-      ctx.lineTo(this.x, this.y + this.radius);
-      ctx.lineTo(this.x - this.radius, this.y);
-      ctx.closePath();
-      ctx.fill();
-    } else if (this.shape === "square") {
-      const size = this.radius * 2;
-      ctx.fillRect(this.x - this.radius, this.y - this.radius, size, size);
+    if (enemySprite) {
+      const size = this.radius * 2.6;
+      ctx.drawImage(enemySprite, this.x - size / 2, this.y - size / 2, size, size);
     } else {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillStyle = this.color;
+      if (this.shape === "diamond") {
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y - this.radius);
+        ctx.lineTo(this.x + this.radius, this.y);
+        ctx.lineTo(this.x, this.y + this.radius);
+        ctx.lineTo(this.x - this.radius, this.y);
+        ctx.closePath();
+        ctx.fill();
+      } else if (this.shape === "square") {
+        const size = this.radius * 2;
+        ctx.fillRect(this.x - this.radius, this.y - this.radius, size, size);
+      } else {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
     const hpRatio = this.currentHp / this.currentStats.hp;
@@ -91,9 +101,9 @@ export class Enemy {
     const barX = this.x - this.radius;
     const barY = this.y - this.radius - 10;
 
-    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    ctx.fillStyle = FANTASY_THEME.overlays.hpBarBack;
     ctx.fillRect(barX, barY, barWidth, 4);
-    ctx.fillStyle = "#22c55e";
+    ctx.fillStyle = FANTASY_THEME.palette.hpGood;
     ctx.fillRect(barX, barY, barWidth * Math.max(hpRatio, 0), 4);
     ctx.restore();
   }
